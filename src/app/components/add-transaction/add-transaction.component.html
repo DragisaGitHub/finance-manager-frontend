@@ -1,0 +1,32 @@
+<div class="add-transaction-container p-6 bg-white rounded-md">
+  <h2 class="text-xl font-semibold mb-4">Add a New Transaction</h2>
+
+  <form (ngSubmit)="addTransaction()">
+    <!-- Transaction fields -->
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="newTransaction.description" name="description" required>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input matInput [(ngModel)]="newTransaction.amount" name="amount" type="number" required>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Transaction Type</mat-label>
+        <mat-select [(ngModel)]="newTransaction.type" name="type" required>
+          <mat-option value="INCOME">Income</mat-option>
+          <mat-option value="EXPENSE">Expense</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit">Add Transaction</button>
+  </form>
+</div>

@@ -1,0 +1,39 @@
+<div class="user-profile-container p-6 max-w-lg mx-auto bg-white rounded-xl shadow-lg space-y-4 transform transition-all duration-500 hover:shadow-2xl hover:scale-105">
+  <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">User Profile</h2>
+
+  <!-- Show loading spinner -->
+  <div *ngIf="loading" class="flex justify-center">
+    <mat-spinner class="text-blue-600"></mat-spinner>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error" class="text-red-600 text-center">
+    {{ error }}
+  </div>
+
+  <!-- User Profile Details -->
+  <div *ngIf="!loading" class="user-profile-details">
+    <mat-card class="bg-blue-50 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <mat-card-content>
+        <table class="w-full text-left table-auto">
+          <tr class="border-b border-gray-300">
+            <th class="p-2 text-gray-700 font-semibold">Username:</th>
+            <td class="p-2 text-gray-800">{{ userForm.get('username')?.value }}</td>
+          </tr>
+          <tr class="border-b border-gray-300">
+            <th class="p-2 text-gray-700 font-semibold">Email:</th>
+            <td class="p-2 text-gray-800">{{ userForm.get('email')?.value }}</td>
+          </tr>
+          <tr class="border-b border-gray-300">
+            <th class="p-2 text-gray-700 font-semibold">Roles:</th>
+            <td class="p-2 text-gray-800">
+              <span *ngFor="let role of userForm.get('roles')?.value; let isLast = last">
+                {{ role }}<span *ngIf="!isLast">, </span>
+              </span>
+            </td>
+          </tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

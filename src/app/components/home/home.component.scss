@@ -1,0 +1,43 @@
+/* homepage.component.scss */
+
+$primary-blue: #4a90e2;
+$dark-gray: #333333;
+$hover-blue: darken($primary-blue, 10%);
+$white: #ffffff;
+
+/* Main content styling */
+.main {
+  background-color: $white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  color: $dark-gray;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: $primary-blue;
+}
+
+p {
+  font-size: 1.2rem;
+  color: $dark-gray;
+  margin-bottom: 1.5rem;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  background-color: $primary-blue;
+  color: $white;
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: $hover-blue;
+  }
+}
