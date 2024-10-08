@@ -1,0 +1,36 @@
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #0056b3;
+    color: white;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .filters {
+    margin-bottom: 20px;
+
+    label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    select {
+      margin-right: 20px;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+  }
+}

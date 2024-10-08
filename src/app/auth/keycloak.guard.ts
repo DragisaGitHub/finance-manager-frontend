@@ -15,15 +15,17 @@ export const keycloakGuard: CanActivateFn = async (route, state) => {
 
   const requiredRoles = route.data?.['roles'];
 
+  console.log('requiredRoles', requiredRoles);
+
   if (requiredRoles) {
     const userRoles = keycloak.getUserRoles();
     const hasRole = requiredRoles.some((role: string) => userRoles.includes(role));
 
     if (!hasRole) {
-      await router.navigate(['/']); // Redirect to home if user lacks the role
+      await router.navigate(['/']);
       return false;
     }
   }
 
-  return true; // Allow access if logged in and has the required role
+  return true;
 };

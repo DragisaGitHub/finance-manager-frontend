@@ -3,9 +3,9 @@ import { Category } from './category.model';
 export interface Transaction {
   id: number;
   description: string;
-  amount: number;
+  amount: number | null;
   date: string;
   type: string;
   user: string;
-  category: Category;
+  category: Category | null;
 }

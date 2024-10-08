@@ -1,5 +1,5 @@
 import {APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { KeycloakService } from 'keycloak-angular';
 import { routes } from './app.routes';
@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService],
+      deps: [KeycloakService, Router],
     },
     BrowserAnimationsModule,
     CommonModule,

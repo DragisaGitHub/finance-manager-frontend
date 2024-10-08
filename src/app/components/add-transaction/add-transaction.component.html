@@ -1,32 +1,62 @@
 <div class="add-transaction-container p-6 bg-white rounded-md">
-  <h2 class="text-xl font-semibold mb-4">Add a New Transaction</h2>
+  <!-- Conditionally show the heading based on whether we're adding or editing a transaction -->
+  <h2 class="text-xl font-semibold mb-4">{{ newTransaction.id ? 'Edit Transaction' : 'Add a New Transaction' }}</h2>
 
-  <form (ngSubmit)="addTransaction()">
-    <!-- Transaction fields -->
-    <div>
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <input matInput [(ngModel)]="newTransaction.description" name="description" required>
+  <form (ngSubmit)="addTransaction()" #transactionForm="ngForm">
+    <!-- Description Field -->
+    <mat-form-field class="w-full">
+      <mat-label>Description</mat-label>
+      <input matInput [(ngModel)]="newTransaction.description" name="description" required [disabled]="showCategoryInput">
+    </mat-form-field>
+
+    <!-- Amount Field with Decimal Input -->
+    <mat-form-field class="w-full">
+      <mat-label>Amount</mat-label>
+      <input matInput
+             type="number"
+             [(ngModel)]="newTransaction.amount"
+             name="amount"
+             required
+             step="0.01"
+             placeholder="0.00"
+      [value]="newTransaction.amount !== 0 ? newTransaction.amount : ''"
+      [disabled]="showCategoryInput"
+      class="no-arrow"
+      (focus)="clearAmountIfZero()">
+    </mat-form-field>
+
+    <!-- Transaction Type Field -->
+    <mat-form-field class="w-full">
+      <mat-label>Transaction Type</mat-label>
+      <mat-select [(ngModel)]="newTransaction.type" name="type" required [disabled]="showCategoryInput">
+        <mat-option value="INCOME">Income</mat-option>
+        <mat-option value="EXPENSE">Expense</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Category Selection Field -->
+    <mat-form-field class="w-full">
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="newTransaction.category" name="category" required (selectionChange)="onCategoryChange($event)" [compareWith]="compareCategories">
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{ category.name }}
+        </mat-option>
+        <mat-option (click)="showCategoryInput = true; newTransaction.category = null">+ Add New Category</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- New Category Input (Hidden by Default) -->
+    <div *ngIf="showCategoryInput">
+      <mat-form-field class="w-full">
+        <mat-label>New Category</mat-label>
+        <input matInput [(ngModel)]="newCategoryName" name="newCategoryName" placeholder="Enter new category">
       </mat-form-field>
+      <button mat-raised-button color="primary" (click)="createCategory()">Create Category</button>
     </div>
 
-    <div>
-      <mat-form-field appearance="outline">
-        <mat-label>Amount</mat-label>
-        <input matInput [(ngModel)]="newTransaction.amount" name="amount" type="number" required>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field appearance="outline">
-        <mat-label>Transaction Type</mat-label>
-        <mat-select [(ngModel)]="newTransaction.type" name="type" required>
-          <mat-option value="INCOME">Income</mat-option>
-          <mat-option value="EXPENSE">Expense</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <button mat-raised-button color="primary" type="submit">Add Transaction</button>
+    <!-- Conditionally change the button label from "Add Transaction" to "Edit Transaction" -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="!transactionForm.form.valid" *ngIf="!showCategoryInput">
+      {{ newTransaction.id ? 'Edit Transaction' : 'Add Transaction' }}
+    </button>
   </form>
 </div>

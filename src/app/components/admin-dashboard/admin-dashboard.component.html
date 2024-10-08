@@ -2,15 +2,18 @@
   <h1 class="text-3xl font-bold mb-4 text-center">Admin Dashboard</h1>
   <p class="text-lg mb-6 text-center">This section is only accessible to admin users.</p>
 
-  <mat-tab-group>
+  <mat-tab-group #tabGroup (selectedTabChange)="onTabChange($event)">
     <mat-tab label="My Transactions">
-      <app-transaction></app-transaction>
+      <app-transaction (editTransactionEvent)="onEditTransaction($event)"></app-transaction>
     </mat-tab>
     <mat-tab *ngIf="isAdmin" label="All Users' Transactions">
       <app-all-users-transactions></app-all-users-transactions>
     </mat-tab>
     <mat-tab label="Add New Transaction">
-      <app-add-transaction></app-add-transaction>
+      <app-add-transaction (transactionAdded)="navigateToMyTransactions()"></app-add-transaction>
+    </mat-tab>
+    <mat-tab label="Savings Goals">
+      <app-savings-goal (goalAdded)="refreshSavingsGoals()"></app-savings-goal>
     </mat-tab>
   </mat-tab-group>
 </div>

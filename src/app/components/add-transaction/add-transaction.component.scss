@@ -1,0 +1,17 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  /* For Chrome, Safari, Edge, and Opera */
+  input[type="number"].no-arrow::-webkit-outer-spin-button,
+  input[type="number"].no-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* For Firefox */
+  input[type="number"].no-arrow {
+    -moz-appearance: textfield;
+  }
+}

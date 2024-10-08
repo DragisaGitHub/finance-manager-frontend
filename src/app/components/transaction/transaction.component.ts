@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CurrencyPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -8,6 +8,9 @@ import { Transaction } from '../../models/transaction.model';
 import { TransactionService } from '../../services/transaction.service';
 import { UserService } from '../../services/user.service';
 import { TransactionFilterService } from '../../services/transaction-filter.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-transaction',
@@ -21,21 +24,36 @@ import { TransactionFilterService } from '../../services/transaction-filter.serv
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatIcon,
+    MatIconButton,
+    MatMenu,
+    MatButton,
+    MatMenuItem,
+    MatMenuTrigger,
   ],
   templateUrl: './transaction.component.html',
   styleUrls: ['./transaction.component.scss'],
 })
 export class TransactionComponent implements OnInit {
+  @Output() editTransactionEvent = new EventEmitter<Transaction>();
+
   transactions: Transaction[] = [];
   filteredTransactions: Transaction[] = [];
   filterType: string = 'all';
   filterCategory: string = 'all';
-  displayedColumns: string[] = ['description', 'amount', 'date', 'type', 'category']; // Now this will be used
+  displayedColumns: string[] = [
+    'description',
+    'amount',
+    'date',
+    'type',
+    'category',
+    'actions',
+  ];
 
   constructor(
     private transactionService: TransactionService,
     private userService: UserService,
-    private transactionFilter: TransactionFilterService
+    private transactionFilter: TransactionFilterService,
   ) {}
 
   ngOnInit() {
@@ -43,22 +61,47 @@ export class TransactionComponent implements OnInit {
   }
 
   loadTransactions() {
-    this.transactionService.getTransactionsForCurrentUser().subscribe((transactions: Transaction[]) => {
-      this.transactions = transactions;
-      this.applyFilters(); // Now this method is properly called
-    });
+    this.transactionService
+      .getTransactionsForCurrentUser()
+      .subscribe((transactions: Transaction[]) => {
+        this.transactions = transactions;
+        this.applyFilters();
+      });
   }
 
   applyFilters() {
-    // Apply the filtering logic using the TransactionFilterService
-    this.filteredTransactions = this.transactionFilter.applyFilters(this.transactions, this.filterType, this.filterCategory);
+    this.filteredTransactions = this.transactionFilter.applyFilters(
+      this.transactions,
+      this.filterType,
+      this.filterCategory,
+    );
   }
-//this method has to be removed from here to the admin dashboard
+
   addTransaction(newTransaction: Transaction) {
     const currentUser = this.userService.getCurrentUserProfile();
     newTransaction.user = currentUser.username; // Assign the username as a string to the user property
     this.transactionService.createTransaction(newTransaction).subscribe(() => {
       this.loadTransactions();
     });
+  }
+
+  editTransaction(transaction: Transaction): void {
+    this.editTransactionEvent.emit(transaction);
+  }
+
+  // Delete transaction
+  deleteTransaction(transaction: Transaction): void {
+    if (
+      confirm(
+        `Are you sure you want to delete the transaction: "${transaction.description}"?`,
+      )
+    ) {
+      this.transactionService
+        .deleteTransaction(transaction.id)
+        .subscribe(() => {
+          this.loadTransactions();
+          console.log('Transaction deleted:', transaction);
+        });
+    }
   }
 }

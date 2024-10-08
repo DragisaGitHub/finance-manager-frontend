@@ -29,6 +29,7 @@ export class AllUsersTransactionsComponent implements OnInit {
   filteredTransactions: Transaction[] = [];
   filterType: string = 'all';
   filterCategory: string = 'all';
+  categories: string[] = [];  // Declare the categories array
   displayedColumns: string[] = ['username', 'description', 'amount', 'date', 'type', 'category'];
 
   constructor(
@@ -41,10 +42,21 @@ export class AllUsersTransactionsComponent implements OnInit {
   }
 
   loadAllTransactions(): void {
-    this.transactionService.getAllTransactions().subscribe((transactions: Transaction[]) => {
-      this.transactions = transactions;
+    this.transactionService.getAllTransactions().subscribe((response: any) => {
+      this.transactions = response._embedded?.transactionList || [];
+      this.categories = this.getUniqueCategories();
       this.applyFilters();
     });
+  }
+
+  getUniqueCategories(): string[] {
+    const categoriesSet = new Set<string>();
+    this.transactions.forEach(transaction => {
+      if (transaction.category?.name) {
+        categoriesSet.add(transaction.category.name);
+      }
+    });
+    return Array.from(categoriesSet);
   }
 
   applyFilters() {
