@@ -1,3 +1,5 @@
+/* common-table.scss */
+
 .transaction-table {
   width: 100%;
   border-collapse: collapse;
@@ -19,18 +21,14 @@
   }
 
   .filters {
-    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 
-    label {
-      font-weight: bold;
-      margin-right: 10px;
-    }
-
-    select {
-      margin-right: 20px;
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
+    .filter-field {
+      flex: 1;
+      min-width: 200px;
     }
   }
+
 }

@@ -2,8 +2,8 @@
   <h2 class="text-xl font-semibold mb-4">All Users' Transactions</h2>
 
   <!-- Filters Section -->
-  <div class="filters p-4 bg-gray-100 rounded-md mb-4 space-y-4">
-    <mat-form-field appearance="fill" class="w-full">
+  <div class="filters p-4 bg-gray-100 rounded-md mb-4 flex flex-wrap gap-4">
+    <mat-form-field appearance="fill" class="filter-field">
       <mat-label>Filter by Type</mat-label>
       <mat-select [(ngModel)]="filterType" (selectionChange)="applyFilters()">
         <mat-option value="all">All</mat-option>
@@ -12,12 +12,12 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="w-full">
+    <mat-form-field appearance="fill" class="filter-field">
       <mat-label>Filter by Category</mat-label>
       <mat-select [(ngModel)]="filterCategory" (selectionChange)="applyFilters()">
         <mat-option value="all">All</mat-option>
-        <mat-option *ngFor="let category of categories" [value]="category">
-          {{ category }}
+        <mat-option *ngFor="let transaction of transactions" [value]="transaction.category?.name">
+          {{ transaction.category?.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>

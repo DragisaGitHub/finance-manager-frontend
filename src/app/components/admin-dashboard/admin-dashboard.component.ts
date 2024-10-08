@@ -38,13 +38,7 @@ export class AdminDashboardComponent implements OnInit {
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    const currentUser = this.userService.getCurrentUserProfile();
-    console.log('currentUser', currentUser);
-    this.isAdmin = currentUser.roles
-      .map((role) => role.toUpperCase())
-      .includes(Role.ADMIN);
-
-    console.log('isAdmin', this.isAdmin);
+    this.isAdmin = this.userService.isAdmin();
   }
 
   navigateToMyTransactions(): void {

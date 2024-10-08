@@ -80,8 +80,7 @@ export class AddTransactionComponent implements OnInit {
   }
 
   addTransaction(): void {
-    const currentUser = this.userService.getCurrentUserProfile();
-    this.newTransaction.user = currentUser.username;
+    this.newTransaction.user = this.userService.getUsername();
     this.transactionService
       .createTransaction(this.newTransaction)
       .subscribe(() => {

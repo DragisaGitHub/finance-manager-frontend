@@ -1,11 +1,7 @@
 /* app.component.scss */
 
 /* Global color variables */
-$primary-blue: #4a90e2; /* Blue as master color */
-$dark-gray: #333333; /* Dark gray for text */
-$hover-blue: darken($primary-blue, 10%);
-$light-gray-bg: #f5f5f5; /* Light gray background for the entire app */
-$white: #ffffff;
+$light-gray-bg: #f5f5f5;
 
 /* Global page styling */
 body {
@@ -15,39 +11,8 @@ body {
   padding: 0;
 }
 
-nav {
-  background-color: $primary-blue;
-  padding: 1rem;
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: flex-start;
-    gap: 1.5rem;
-
-    li {
-      display: inline;
-
-      a {
-        color: $white;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        transition: background-color 0.3s, color 0.3s;
-
-        &:hover {
-          background-color: $hover-blue;
-        }
-      }
-    }
-  }
-}
-
-/* Router outlet to give padding to the pages */
+/* Router outlet styling */
 router-outlet {
-  padding: 2rem;
   display: block;
+  padding: 1rem; /* Add padding to give space between components */
 }

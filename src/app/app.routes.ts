@@ -1,24 +1,23 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { ErrorPageComponent } from './components/error-page/error-page.component'; // Import the error page
 import { keycloakGuard } from './auth/keycloak.guard';
+import { AddTransactionComponent } from './components/add-transaction/add-transaction.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Home is accessible to all
   {
     path: 'admin',
     component: AdminDashboardComponent,
-    canActivate: [keycloakGuard], // Protect with Keycloak
-    data: { roles: ['admin'] } // Only admin role
+    canActivate: [keycloakGuard],
+    data: { roles: ['admin'] },
   },
   {
-    path: 'user-profile',
-    component: UserProfileComponent,
-    canActivate: [keycloakGuard], // Protect with Keycloak
-    data: { roles: ['user'] } // Only regular user role
+    path: 'add-transaction',
+    component: AddTransactionComponent,
+    canActivate: [keycloakGuard],
   },
-  { path: 'error', component: ErrorPageComponent }, // Error page route
-  { path: '**', redirectTo: 'error' } // Fallback route now redirects to the error page
+  { path: 'error', component: ErrorPageComponent },
+  { path: '**', redirectTo: 'error' },
 ];

@@ -1,17 +1,17 @@
+/* add-transaction.component.scss */
+
 :host {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 
-  /* For Chrome, Safari, Edge, and Opera */
-  input[type="number"].no-arrow::-webkit-outer-spin-button,
-  input[type="number"].no-arrow::-webkit-inner-spin-button {
+  /* Remove arrows in number input fields */
+  input[type="number"].no-arrow {
+    /* For Chrome, Safari, Edge, and Opera */
     -webkit-appearance: none;
     margin: 0;
-  }
 
-  /* For Firefox */
-  input[type="number"].no-arrow {
+    /* For Firefox */
     -moz-appearance: textfield;
   }
 }

@@ -1,9 +1,9 @@
 <div class="savings-goal-container p-6 bg-white rounded-md">
   <h2 class="text-xl font-semibold mb-4">Savings Goals</h2>
 
-  <div *ngIf="alertMessage" class="alert alert-warning">
-    {{ alertMessage }}
-  </div>
+  <!--  <div *ngIf="alertMessage" class="alert alert-warning">-->
+  <!--    {{ alertMessage }}-->
+  <!--  </div>-->
 
   <form (ngSubmit)="addOrUpdateGoal()" class="space-y-4">
     <!-- Name Field -->
@@ -15,21 +15,40 @@
     <!-- Target Amount Field -->
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>Target Amount</mat-label>
-      <input matInput type="number" [(ngModel)]="newGoal.targetAmount" name="targetAmount" required />
+      <input matInput
+             type="number"
+             [(ngModel)]="newGoal.targetAmount"
+             name="targetAmount"
+             required
+             step="0.01"
+             placeholder="0.00"
+             [value]="newGoal.targetAmount !== 0 ? newGoal.targetAmount : ''"
+             class="no-arrow"
+             (focus)="clearTargetAmountIfZero()" />
     </mat-form-field>
 
     <!-- Current Amount Field -->
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>Current Amount</mat-label>
-      <input matInput type="number" [(ngModel)]="newGoal.currentAmount" name="currentAmount" required />
+      <input matInput
+             type="number"
+             [(ngModel)]="newGoal.currentAmount"
+             name="currentAmount"
+             required
+             step="0.01"
+             placeholder="0.00"
+             [value]="newGoal.currentAmount !== 0 ? newGoal.currentAmount : ''"
+             class="no-arrow"
+             (focus)="clearCurrentAmountIfZero()" />
     </mat-form-field>
 
     <!-- Target Date Field -->
-    <mat-form-field appearance="fill" class="w-full">
+    <mat-form-field>
       <mat-label>Target Date</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="newGoal.targetDate" name="targetDate" required />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <input matInput [matDatepicker]="picker">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [calendarHeaderComponent]="customDataPicker"></mat-datepicker>
     </mat-form-field>
 
     <!-- Save Button -->
@@ -40,13 +59,22 @@
 
   <!-- Display Savings Goals -->
   <div class="goals-list mt-8 space-y-4">
+    <!-- Show this message when there are no goals -->
+    <div *ngIf="goals.length === 0" class="text-center text-gray-500">
+      No savings goals available yet. Create one to get started!
+    </div>
+
+    <!-- Only iterate over goals if there are goals -->
     <div *ngFor="let goal of goals" class="p-4 bg-gray-100 rounded-md">
       <h3 class="text-lg font-semibold">
         {{ goal.name }} ({{ goal.currentAmount }} / {{ goal.targetAmount }})
       </h3>
       <div class="flex justify-between items-center mt-2">
         <span class="text-sm text-gray-500">Target Date: {{ goal.targetDate | date }}</span>
-        <button mat-raised-button color="warn" (click)="deleteGoal(goal?.id)">
+        <button *ngIf="goal?.id"
+                mat-raised-button
+                color="warn"
+                (click)="deleteGoal(goal?.id!)">
           Delete
         </button>
       </div>

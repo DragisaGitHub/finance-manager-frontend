@@ -1,17 +1,48 @@
-<div class="home-container p-8 max-w-2xl mx-auto bg-gray-100 rounded-lg shadow-md space-y-6 text-center">
-  <h1 class="text-3xl font-bold mb-4">Welcome to the Finance Management System</h1>
-  <p class="text-lg mb-6">Select a section to proceed:</p>
+<div class="container mx-auto p-6">
+  <!-- Header Section -->
+  <header class="text-center my-8">
+    <h1 class="text-4xl font-bold text-gray-800">Welcome to Finance Manager</h1>
+    <p class="text-lg text-gray-600 mt-2">Manage your finances efficiently, set goals, and track transactions seamlessly.</p>
+  </header>
 
-  <ul class="space-y-4">
-    <li>
-      <a mat-raised-button color="primary" routerLink="/admin" class="w-full block py-2">
-        Admin Dashboard
+  <!-- User Action Buttons -->
+  <section class="text-center mt-12">
+    <!-- Conditional rendering for admin users -->
+    <div *ngIf="isAdmin">
+      <a routerLink="/admin" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-all">
+        Go to Admin Dashboard
       </a>
-    </li>
-    <li>
-      <a mat-raised-button color="accent" routerLink="/user-profile" class="w-full block py-2">
-        User Profile
-      </a>
-    </li>
-  </ul>
+    </div>
+  </section>
+  <!-- Features Section -->
+  <section class="mt-16">
+    <h2 class="text-2xl font-semibold text-gray-800 text-center mb-8">What You Can Do</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-gray-700 mb-4">Track Transactions</h3>
+        <p class="text-gray-600">Easily track your income and expenses with our powerful transaction manager.</p>
+      </div>
+      <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-gray-700 mb-4">Set Savings Goals</h3>
+        <p class="text-gray-600">Set financial goals and monitor your progress to achieve your savings targets.</p>
+      </div>
+      <div class="bg-white shadow-lg p-6 rounded-lg text-center">
+        <h3 class="text-xl font-semibold text-gray-700 mb-4">Multi-Currency Support</h3>
+        <p class="text-gray-600">Choose between currencies (Dollar, Euro, Dinar) during transaction creation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action for New Users -->
+  <section class="text-center mt-16">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">New Here?</h2>
+    <p class="text-gray-600 mb-8">Get started with Finance Manager to gain full control over your finances!</p>
+    <button
+      (click)="createAccount()"
+      class="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 transition-all"
+    >
+      Create an Account
+    </button>
+  </section>
+
 </div>

@@ -78,8 +78,7 @@ export class TransactionComponent implements OnInit {
   }
 
   addTransaction(newTransaction: Transaction) {
-    const currentUser = this.userService.getCurrentUserProfile();
-    newTransaction.user = currentUser.username; // Assign the username as a string to the user property
+    newTransaction.user = this.userService.getUsername();
     this.transactionService.createTransaction(newTransaction).subscribe(() => {
       this.loadTransactions();
     });
