@@ -1,0 +1,21 @@
+<div class="relative">
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Notifications">
+    <mat-icon *ngIf="notifications.length === 0">notifications_none</mat-icon>
+    <mat-icon *ngIf="notifications.length > 0">notifications_active</mat-icon>
+    <span *ngIf="notifications.length > 0" class="notification-badge">{{ notifications.length }}</span>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <div *ngIf="isLoading">
+      <mat-progress-spinner diameter="24" mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <div *ngIf="!isLoading && notifications.length === 0">
+      <span class="text-gray-500 p-2">No new notifications</span>
+    </div>
+    <ng-container *ngIf="!isLoading && notifications.length > 0">
+      <button mat-menu-item *ngFor="let notification of notifications" (click)="markAsRead(notification)">
+        {{ notification.message }}
+      </button>
+    </ng-container>
+  </mat-menu>
+</div>

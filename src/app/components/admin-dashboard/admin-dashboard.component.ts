@@ -8,6 +8,7 @@ import { AddTransactionComponent } from '../add-transaction/add-transaction.comp
 import { NgIf } from '@angular/common';
 import { Transaction } from '../../models/transaction.model';
 import { SavingsGoalComponent } from '../savings-goal/savings-goal.component';
+import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -22,6 +23,7 @@ import { SavingsGoalComponent } from '../savings-goal/savings-goal.component';
     MatTab,
     NgIf,
     SavingsGoalComponent,
+    NotificationComponent,
   ],
 })
 export class AdminDashboardComponent implements OnInit {

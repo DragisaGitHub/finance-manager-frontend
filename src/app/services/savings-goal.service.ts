@@ -25,4 +25,10 @@ export class SavingsGoalService {
   deleteGoal(goalId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${goalId}`);
   }
+
+  addToGoal(goalId: number, amount: number): Observable<SavingsGoal> {
+    return this.http.put<SavingsGoal>(`${this.apiUrl}/${goalId}/add`, null, {
+      params: { amount: amount.toString() }
+    });
+  }
 }

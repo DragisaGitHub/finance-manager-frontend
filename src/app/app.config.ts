@@ -6,7 +6,7 @@ import { routes } from './app.routes';
 import {initializeKeycloak} from "./keycloak-init.factory";
 import {keycloakInterceptor} from "./interceptors/keycloak.interceptor";
 import { BrowserAnimationsModule, NoopAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     BrowserAnimationsModule,
     CommonModule,
     NoopAnimationsModule,
+    DatePipe
   ],
 };
