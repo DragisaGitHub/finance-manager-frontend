@@ -10,6 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { Category } from '../../models/category.model';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-add-transaction',
@@ -24,6 +26,10 @@ import { Category } from '../../models/category.model';
     MatButtonModule,
     NgIf,
     NgForOf,
+    MatCheckbox,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
   ],
 })
 export class AddTransactionComponent implements OnInit {
@@ -50,7 +56,7 @@ export class AddTransactionComponent implements OnInit {
   constructor(
     private transactionService: TransactionService,
     private userService: UserService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
   ) {}
 
   ngOnInit(): void {
@@ -79,13 +85,13 @@ export class AddTransactionComponent implements OnInit {
       });
   }
 
+
   addTransaction(): void {
     this.newTransaction.user = this.userService.getUsername();
-    this.transactionService
-      .createTransaction(this.newTransaction)
-      .subscribe(() => {
-        this.transactionAdded.emit();
-      });
+    const url = this.newTransaction.isRecurring ? '/recurring' : '';
+    this.transactionService.createTransaction(this.newTransaction, url).subscribe(() => {
+      this.transactionAdded.emit();
+    });
   }
 
   compareCategories(c1: Category, c2: Category): boolean {

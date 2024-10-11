@@ -9,6 +9,7 @@ import { NgIf } from '@angular/common';
 import { Transaction } from '../../models/transaction.model';
 import { SavingsGoalComponent } from '../savings-goal/savings-goal.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { MonthlyReportComponent } from '../reports/monthly-report/monthly-report.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -24,6 +25,7 @@ import { NotificationComponent } from '../notification/notification.component';
     NgIf,
     SavingsGoalComponent,
     NotificationComponent,
+    MonthlyReportComponent,
   ],
 })
 export class AdminDashboardComponent implements OnInit {

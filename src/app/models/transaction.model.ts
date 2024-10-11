@@ -8,4 +8,7 @@ export interface Transaction {
   type: string;
   user: string;
   category: Category | null;
+  isRecurring?: boolean;
+  frequency?: string;
+  nextOccurrence?: string;
 }

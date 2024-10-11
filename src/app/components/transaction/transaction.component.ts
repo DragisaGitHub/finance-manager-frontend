@@ -77,18 +77,10 @@ export class TransactionComponent implements OnInit {
     );
   }
 
-  addTransaction(newTransaction: Transaction) {
-    newTransaction.user = this.userService.getUsername();
-    this.transactionService.createTransaction(newTransaction).subscribe(() => {
-      this.loadTransactions();
-    });
-  }
-
   editTransaction(transaction: Transaction): void {
     this.editTransactionEvent.emit(transaction);
   }
 
-  // Delete transaction
   deleteTransaction(transaction: Transaction): void {
     if (
       confirm(

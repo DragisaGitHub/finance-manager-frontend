@@ -19,10 +19,10 @@
              required
              step="0.01"
              placeholder="0.00"
-      [value]="newTransaction.amount !== 0 ? newTransaction.amount : ''"
-      [disabled]="showCategoryInput"
-      class="no-arrow"
-      (focus)="clearAmountIfZero()">
+             [value]="newTransaction.amount !== 0 ? newTransaction.amount : ''"
+             [disabled]="showCategoryInput"
+             class="no-arrow"
+             (focus)="clearAmountIfZero()">
     </mat-form-field>
 
     <!-- Transaction Type Field -->
@@ -52,6 +52,32 @@
         <input matInput [(ngModel)]="newCategoryName" name="newCategoryName" placeholder="Enter new category">
       </mat-form-field>
       <button mat-raised-button color="primary" (click)="createCategory()">Create Category</button>
+    </div>
+
+    <!-- Recurring Toggle Checkbox -->
+    <mat-checkbox [(ngModel)]="newTransaction.isRecurring" name="isRecurring">
+      Is this a recurring transaction?
+    </mat-checkbox>
+
+    <!-- Frequency Field (Visible if Recurring is checked) -->
+    <div *ngIf="newTransaction.isRecurring">
+      <mat-form-field class="w-full">
+        <mat-label>Frequency</mat-label>
+        <mat-select [(ngModel)]="newTransaction.frequency" name="frequency" required>
+          <mat-option value="daily">Daily</mat-option>
+          <mat-option value="weekly">Weekly</mat-option>
+          <mat-option value="monthly">Monthly</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Next Occurrence Field -->
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Next Occurrence</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="newTransaction.nextOccurrence" name="nextOccurrence" required />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
     </div>
 
     <!-- Conditionally change the button label from "Add Transaction" to "Edit Transaction" -->
