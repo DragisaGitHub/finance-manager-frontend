@@ -11,7 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { Category } from '../../models/category.model';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from '@angular/material/datepicker';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { RecurringTransaction } from '../../models/recurring-transaction.model';
 
 @Component({
   selector: 'app-add-transaction',
@@ -47,6 +52,8 @@ export class AddTransactionComponent implements OnInit {
       name: '',
       transactions: [],
     },
+    frequency: '',
+    nextOccurrence: '',
   };
 
   categories: Category[] = [];
@@ -65,6 +72,7 @@ export class AddTransactionComponent implements OnInit {
 
   loadCategories(): void {
     this.categoryService.getAllCategories().subscribe((response: any) => {
+      console.log('response', response);
       this.categories = response._embedded.categoryList;
     });
   }
@@ -85,13 +93,49 @@ export class AddTransactionComponent implements OnInit {
       });
   }
 
-
   addTransaction(): void {
     this.newTransaction.user = this.userService.getUsername();
-    const url = this.newTransaction.isRecurring ? '/recurring' : '';
-    this.transactionService.createTransaction(this.newTransaction, url).subscribe(() => {
-      this.transactionAdded.emit();
-    });
+
+    if (this.newTransaction.isRecurring) {
+      console.log('this.newTransaction', this.newTransaction);
+      this.transactionService.createTransaction(this.newTransaction).subscribe({
+        next: (savedTransaction) => {
+          console.log('Transaction successfully created', savedTransaction);
+
+          const recurringTransaction: RecurringTransaction = {
+            id: 0,
+            transaction: savedTransaction,
+            frequency: this.newTransaction.frequency,
+            nextOccurrence: this.newTransaction.nextOccurrence,
+          };
+
+          this.transactionService.createRecurringTransaction(recurringTransaction).subscribe({
+            next: () => {
+              console.log('Recurring transaction successfully created');
+              this.transactionAdded.emit();
+              this.resetForm();
+            },
+            error: (err) => {
+              console.error('Error creating recurring transaction', err);
+            },
+          });
+        },
+        error: (err) => {
+          console.error('Error creating transaction', err);
+        },
+      });
+    } else {
+      this.transactionService.createTransaction(this.newTransaction).subscribe({
+        next: () => {
+          console.log('Regular transaction successfully created');
+          this.transactionAdded.emit();
+          this.resetForm();
+        },
+        error: (err) => {
+          console.error('Error creating regular transaction', err);
+        },
+      });
+    }
   }
 
   compareCategories(c1: Category, c2: Category): boolean {
@@ -115,5 +159,23 @@ export class AddTransactionComponent implements OnInit {
     if (this.newTransaction.amount === 0) {
       this.newTransaction.amount = null;
     }
+  }
+
+  resetForm(): void {
+    this.newTransaction = {
+      id: 0,
+      description: '',
+      amount: null,
+      date: '',
+      type: '',
+      user: '',
+      category: {
+        id: 0,
+        name: '',
+        transactions: [],
+      },
+      frequency: '',
+      nextOccurrence: '',
+    };
   }
 }

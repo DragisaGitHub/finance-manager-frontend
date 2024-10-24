@@ -29,8 +29,7 @@ export class AllUsersTransactionsComponent implements OnInit {
   filteredTransactions: Transaction[] = [];
   filterType: string = 'all';
   filterCategory: string = 'all';
-  categories: string[] = [];  // Declare the categories array
-  displayedColumns: string[] = ['username', 'description', 'amount', 'date', 'type', 'category'];
+  categories: string[] = [];
 
   constructor(
     private transactionService: TransactionService,
@@ -52,6 +51,8 @@ export class AllUsersTransactionsComponent implements OnInit {
   getUniqueCategories(): string[] {
     const categoriesSet = new Set<string>();
     this.transactions.forEach(transaction => {
+      console.log('transaction', transaction);
+      console.log('transaction.category', transaction.category?.name);
       if (transaction.category?.name) {
         categoriesSet.add(transaction.category.name);
       }

@@ -6,11 +6,11 @@ export const keycloakGuard: CanActivateFn = async (route, state) => {
   const keycloak: KeycloakService = inject(KeycloakService);
   const router: Router = inject(Router);
 
-  const isLoggedIn = keycloak.isLoggedIn(); // Await the Promise
-
-  if (!isLoggedIn) {
-    await keycloak.login({ redirectUri: window.location.origin + state.url });
-    return false;
+  let authenticated = keycloak.isTokenExpired();
+  if (authenticated) {
+    await keycloak.login({
+      redirectUri: window.location.origin + state.url,
+    });
   }
 
   const requiredRoles = route.data?.['roles'];

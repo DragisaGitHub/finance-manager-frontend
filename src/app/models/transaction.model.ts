@@ -9,6 +9,6 @@ export interface Transaction {
   user: string;
   category: Category | null;
   isRecurring?: boolean;
-  frequency?: string;
-  nextOccurrence?: string;
+  frequency: string;
+  nextOccurrence: string;
 }
