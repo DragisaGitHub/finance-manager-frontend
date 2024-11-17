@@ -1,15 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTab, MatTabGroup } from '@angular/material/tabs'; // Import MatTabGroup
 import { UserService } from '../../services/user.service';
-import { Role } from '../../models/role.model';
 import { TransactionComponent } from '../transaction/transaction.component';
 import { AllUsersTransactionsComponent } from '../all-users-transactions/all-users-transactions.component';
 import { AddTransactionComponent } from '../add-transaction/add-transaction.component';
 import { NgIf } from '@angular/common';
-import { Transaction } from '../../models/transaction.model';
 import { SavingsGoalComponent } from '../savings-goal/savings-goal.component';
 import { NotificationComponent } from '../notification/notification.component';
 import { MonthlyReportComponent } from '../reports/monthly-report/monthly-report.component';
+import { BudgetManagementComponent } from '../budget-management/budget-management.component';
+import { Transaction } from '../../api';
+import { CVComponent } from '../cv/cv.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -26,6 +27,8 @@ import { MonthlyReportComponent } from '../reports/monthly-report/monthly-report
     SavingsGoalComponent,
     NotificationComponent,
     MonthlyReportComponent,
+    BudgetManagementComponent,
+    CVComponent,
   ],
 })
 export class AdminDashboardComponent implements OnInit {

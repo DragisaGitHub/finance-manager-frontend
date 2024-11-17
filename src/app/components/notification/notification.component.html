@@ -13,7 +13,7 @@
       <span class="text-gray-500 p-2">No new notifications</span>
     </div>
     <ng-container *ngIf="!isLoading && notifications.length > 0">
-      <button mat-menu-item *ngFor="let notification of notifications" (click)="markAsRead(notification)">
+      <button mat-menu-item *ngFor="let notification of notifications" (click)="onNotificationClick(notification)">
         {{ notification.message }}
       </button>
     </ng-container>

@@ -1,0 +1,236 @@
+<div class="cv-container">
+  <!-- CV List Section -->
+  <div class="cv-list">
+    <h2>Your CVs</h2>
+    <ul>
+      <li *ngFor="let cv of cvs" class="cv-item">
+        <h3>{{ cv.fullName }}</h3>
+        <p>Email: {{ cv.email }}</p>
+        <p>Phone: {{ cv.phoneNumber }}</p>
+        <p>Address: {{ cv.address }}</p>
+        <p>Summary: {{ cv.summary }}</p>
+
+        <!-- Profile Image (if available) with ngSrc for optimization -->
+        <div class="cv-image">
+          <img *ngIf="cv.profileImage" [src]="cv.profileImage" alt="Profile Image" width="100" height="100"
+               class="profile-image" />
+        </div>
+
+        <!-- Experience Section -->
+        <div *ngIf="cv.experiences?.length">
+          <h4>Experiences</h4>
+          <ul>
+            <li *ngFor="let experience of cv.experiences">
+              <p><strong>Position:</strong> {{ experience.position }}</p>
+              <p><strong>Company:</strong> {{ experience.company }}</p>
+              <p><strong>Start Date:</strong> {{ experience.startDate | date }}</p>
+              <p><strong>End Date:</strong> {{ experience.endDate | date }}</p>
+              <p><strong>Description:</strong> {{ experience.description }}</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Education Section -->
+        <div *ngIf="cv.educations?.length">
+          <h4>Education</h4>
+          <ul>
+            <li *ngFor="let education of cv.educations">
+              <p><strong>Degree:</strong> {{ education.degree }}</p>
+              <p><strong>Institution:</strong> {{ education.institution }}</p>
+              <p><strong>Start Date:</strong> {{ education.startDate | date }}</p>
+              <p><strong>End Date:</strong> {{ education.endDate | date }}</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Social Links Section in CV List -->
+        <div *ngIf="cv.socialLinks?.length">
+          <h4>Social Links</h4>
+          <ul>
+            <li *ngFor="let link of cv.socialLinks">
+              <a [href]="link.url" target="_blank">
+                <i [class]="link.iconClass"></i> {{ link.platform }}
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Skills Section -->
+        <div *ngIf="cv.skills?.length">
+          <h4>Skills</h4>
+          <ul>
+            <li *ngFor="let skill of cv.skills">{{ skill }}</li>
+          </ul>
+        </div>
+
+        <!-- Languages Section -->
+        <div *ngIf="cv.languages?.length">
+          <h4>Languages</h4>
+          <ul>
+            <li *ngFor="let language of cv.languages">{{ language }}</li>
+          </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <button mat-button color="primary" (click)="onEditCV(cv)">Edit</button>
+        <button mat-button color="warn" (click)="onDeleteCV(cv.id, cv.fullName)">Delete</button>
+        <button mat-button color="accent" (click)="generatePDF(cv.id!)">Generate PDF</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- CV Form Section -->
+  <div class="cv-form">
+    <h2>{{ isEditing ? 'Edit CV' : 'Add New CV' }}</h2>
+    <form [formGroup]="cvForm" (ngSubmit)="onSubmit()">
+      <!-- Profile Image Upload -->
+      <div class="file-upload-container">
+        <button mat-button color="primary" (click)="fileInput.click()">Upload Profile Image</button>
+        <input
+          type="file"
+          #fileInput
+          (change)="onProfileImageChange($event)"
+          hidden
+        />
+        <span *ngIf="selectedFileName">
+          {{ selectedFileName }}
+        </span>
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" required />
+        <mat-error *ngIf="emailControl?.hasError('required')">Email is required.</mat-error>
+        <mat-error *ngIf="emailControl?.hasError('email')">Invalid email format.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phoneNumber" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <textarea matInput formControlName="address"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Summary</mat-label>
+        <textarea matInput formControlName="summary"></textarea>
+      </mat-form-field>
+
+      <!-- Education Section -->
+      <h3>Education</h3>
+      <div formArrayName="educations">
+        <div *ngFor="let education of educations.controls; let i = index" [formGroupName]="i" class="education-section">
+          <mat-form-field appearance="fill">
+            <mat-label>Degree</mat-label>
+            <input matInput formControlName="degree" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Institution</mat-label>
+            <input matInput formControlName="institution" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput type="date" formControlName="startDate" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput type="date" formControlName="endDate" />
+          </mat-form-field>
+
+          <button mat-button color="warn" (click)="removeEducation(i)">Remove Education</button>
+        </div>
+        <button mat-button color="primary" (click)="addEducation()">Add Education</button>
+      </div>
+
+      <!-- Experience Section -->
+      <h3>Experience</h3>
+      <div formArrayName="experiences">
+        <div *ngFor="let experience of experiences.controls; let i = index" [formGroupName]="i"
+             class="experience-section">
+          <mat-form-field appearance="fill">
+            <mat-label>Position</mat-label>
+            <input matInput formControlName="position" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Company</mat-label>
+            <input matInput formControlName="company" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Start Date</mat-label>
+            <input matInput type="date" formControlName="startDate" required />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput type="date" formControlName="endDate" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+          <button mat-button color="warn" (click)="removeExperience(i)">Remove Experience</button>
+        </div>
+        <button mat-button color="primary" (click)="addExperience()">Add Experience</button>
+      </div>
+
+      <!-- Social Links Section in CV Form -->
+      <h3>Social Links</h3>
+      <div formArrayName="socialLinks">
+        <div *ngFor="let socialLink of socialLinks.controls; let i = index" [formGroupName]="i"
+             class="social-link-section">
+          <mat-form-field appearance="fill">
+            <mat-label>Platform</mat-label>
+            <input matInput formControlName="platform" placeholder="E.g., LinkedIn, GitHub" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>URL</mat-label>
+            <input matInput formControlName="url" placeholder="E.g., https://linkedin.com/in/example" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Icon Class</mat-label>
+            <input matInput formControlName="iconClass" placeholder="E.g., fab fa-linkedin" />
+          </mat-form-field>
+
+          <button mat-button color="warn" (click)="removeSocialLink(i)">Remove Link</button>
+        </div>
+        <button mat-button color="primary" (click)="addSocialLink()">Add Social Link</button>
+      </div>
+
+      <!-- Skills Section -->
+      <h3>Skills</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Skills</mat-label>
+        <input matInput formControlName="skills" placeholder="E.g., JavaScript, Angular, SQL" />
+      </mat-form-field>
+
+      <!-- Languages Section -->
+      <h3>Languages</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Languages</mat-label>
+        <input matInput formControlName="languages" placeholder="E.g., English, Spanish" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">
+        {{ isEditing ? 'Update CV' : 'Create CV' }}
+      </button>
+      <button mat-button type="button" (click)="onAddCV()" *ngIf="isEditing">Cancel</button>
+    </form>
+  </div>
+</div>

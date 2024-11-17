@@ -1,13 +1,13 @@
 // src/app/components/notification/notification.component.ts
 import { Component, OnInit } from '@angular/core';
-import { NotificationService } from '../../services/notification.service';
-import { Notification } from '../../models/notification.model';
 import { UserService } from '../../services/user.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { NgForOf, NgIf } from '@angular/common';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Notification } from '../../api';
+import { NotificationWrapperService } from '../../services/notification-wrapper.service';
 
 @Component({
   selector: 'app-notification',
@@ -31,30 +31,41 @@ export class NotificationComponent implements OnInit {
   currentUsername: string = '';
 
   constructor(
-    private notificationService: NotificationService,
+    private notificationService: NotificationWrapperService,
     private userService: UserService,
   ) {}
 
   ngOnInit(): void {
     this.currentUsername = this.userService.getUsername();
-    this.notificationService.notifications$.subscribe((notifications) => {
+    this.notificationService.notifications$.subscribe((notifications: Notification[]) => {
+
       this.notifications = notifications.filter(
-        (notification) => notification.username === this.currentUsername,
+        (notification): notification is Notification & { username: string } =>
+          notification.username === this.currentUsername
       );
       this.isLoading = false;
     });
 
-    this.notificationService.refreshNotifications();
+    this.notificationService.fetchNotificationsForUser();
+  }
+
+  onNotificationClick(notification: Notification): void {
+    this.markAsRead(notification);
   }
 
   markAsRead(notification: Notification): void {
-    this.notificationService.markAsRead(notification.id).subscribe(
-      () => {
-        this.notificationService.refreshNotifications(); // Refresh after marking as read
-      },
-      (error) => {
-        console.error('Error marking notification as read', error);
-      },
-    );
+    if (notification.id !== undefined) {
+      this.notificationService.markNotificationAsRead(notification.id).subscribe({
+        next: () => {
+          this.notificationService.fetchNotificationsForUser();
+        },
+        error: (error: any) => {
+          console.error('Error marking notification as read', error);
+        },
+      });
+    } else {
+      console.error('Notification ID is undefined, cannot mark as read');
+    }
   }
+
 }

@@ -4,13 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Transaction } from '../../models/transaction.model';
-import { TransactionService } from '../../services/transaction.service';
 import { UserService } from '../../services/user.service';
-import { TransactionFilterService } from '../../services/transaction-filter.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { Transaction, TransactionsService } from '../../api';
+import { TransactionFilterService } from '../../services/transaction-filter.service';
 
 @Component({
   selector: 'app-transaction',
@@ -51,7 +50,7 @@ export class TransactionComponent implements OnInit {
   ];
 
   constructor(
-    private transactionService: TransactionService,
+    private transactionService: TransactionsService,
     private userService: UserService,
     private transactionFilter: TransactionFilterService,
   ) {}
@@ -63,9 +62,20 @@ export class TransactionComponent implements OnInit {
   loadTransactions() {
     this.transactionService
       .getTransactionsForCurrentUser()
-      .subscribe((transactions: Transaction[]) => {
-        this.transactions = transactions;
-        this.applyFilters();
+      .subscribe({
+        next: async (response: any) => {
+          if (response instanceof Blob) {
+            const text = await response.text();
+            const jsonResponse = JSON.parse(text);
+            this.transactions = jsonResponse || [];
+          } else {
+            this.transactions = response._embedded?.transactionList || [];
+          }
+          this.applyFilters();
+        },
+        error: (error) => {
+          console.error('Error loading transactions:', error);
+        },
       });
   }
 
@@ -82,17 +92,14 @@ export class TransactionComponent implements OnInit {
   }
 
   deleteTransaction(transaction: Transaction): void {
-    if (
-      confirm(
-        `Are you sure you want to delete the transaction: "${transaction.description}"?`,
-      )
-    ) {
+    if (transaction.id !== undefined && confirm(`Are you sure you want to delete the transaction: "${transaction.description}"?`)) {
       this.transactionService
         .deleteTransaction(transaction.id)
         .subscribe(() => {
           this.loadTransactions();
-          console.log('Transaction deleted:', transaction);
         });
+    } else {
+      console.error("Transaction ID is undefined. Cannot delete transaction.");
     }
   }
 }

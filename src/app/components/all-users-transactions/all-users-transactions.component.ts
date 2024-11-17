@@ -4,9 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Transaction } from '../../models/transaction.model';
-import { TransactionService } from '../../services/transaction.service';
 import { TransactionFilterService } from '../../services/transaction-filter.service';
+import { Transaction, TransactionsService } from '../../api';
 
 @Component({
   selector: 'app-all-users-transactions',
@@ -32,7 +31,7 @@ export class AllUsersTransactionsComponent implements OnInit {
   categories: string[] = [];
 
   constructor(
-    private transactionService: TransactionService,
+    private transactionService: TransactionsService,
     private transactionFilter: TransactionFilterService
   ) {}
 
@@ -41,18 +40,30 @@ export class AllUsersTransactionsComponent implements OnInit {
   }
 
   loadAllTransactions(): void {
-    this.transactionService.getAllTransactions().subscribe((response: any) => {
-      this.transactions = response._embedded?.transactionList || [];
-      this.categories = this.getUniqueCategories();
-      this.applyFilters();
+    this.transactionService.getAllTransactions().subscribe({
+      next: async (response: any) => {
+        this.transactions = await this.parseTransactionsResponse(response);
+        this.categories = this.getUniqueCategories();
+        this.applyFilters();
+      },
+      error: (error) => {
+        console.error('Error loading transactions:', error);
+      }
     });
+  }
+
+  private async parseTransactionsResponse(response: any): Promise<Transaction[]> {
+    if (response instanceof Blob) {
+      const text = await response.text();
+      const jsonResponse = JSON.parse(text);
+      return jsonResponse || [];
+    }
+    return response._embedded?.transactionList || [];
   }
 
   getUniqueCategories(): string[] {
     const categoriesSet = new Set<string>();
     this.transactions.forEach(transaction => {
-      console.log('transaction', transaction);
-      console.log('transaction.category', transaction.category?.name);
       if (transaction.category?.name) {
         categoriesSet.add(transaction.category.name);
       }

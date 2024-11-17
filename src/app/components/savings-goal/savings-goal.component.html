@@ -46,7 +46,7 @@
       No savings goals available yet. Create one to get started!
     </div>
 
-    <div *ngFor="let goal of filteredGoals" class="p-4 bg-white shadow-md rounded-md">
+    <div *ngFor="let goal of filteredGoals; trackBy: trackById" class="p-4 bg-white shadow-md rounded-md">
       <div class="flex justify-between items-center mb-2">
         <div>
           <h3 class="text-lg font-semibold text-gray-800">{{ goal.name }}</h3>
@@ -75,12 +75,12 @@
       <div class="flex items-center mt-4" *ngIf="!goal.completed">
         <mat-form-field appearance="fill" class="flex-1">
           <mat-label>Add Amount</mat-label>
-          <input matInput type="number" [(ngModel)]="goal.additionalAmount" name="additionalAmount" step="0.01" placeholder="0.00" />
+          <input matInput type="number" [(ngModel)]="additionalAmounts[goal.id!]" name="additionalAmount" step="0.01" placeholder="0.00" />
         </mat-form-field>
         <button mat-icon-button color="primary" class="ml-2" (click)="addToGoal(goal)">
           <mat-icon>add_circle</mat-icon>
         </button>
       </div>
-    </div>
+
   </div>
 </div>

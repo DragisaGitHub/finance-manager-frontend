@@ -41,7 +41,7 @@
         <mat-option *ngFor="let category of categories" [value]="category">
           {{ category.name }}
         </mat-option>
-        <mat-option (click)="showCategoryInput = true; newTransaction.category = null">+ Add New Category</mat-option>
+        <mat-option (click)="handleAddNewCategory()">+ Add New Category</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -55,15 +55,15 @@
     </div>
 
     <!-- Recurring Toggle Checkbox -->
-    <mat-checkbox [(ngModel)]="newTransaction.isRecurring" name="isRecurring">
+    <mat-checkbox [(ngModel)]="isRecurring" name="isRecurring">
       Is this a recurring transaction?
     </mat-checkbox>
 
     <!-- Frequency Field (Visible if Recurring is checked) -->
-    <div *ngIf="newTransaction.isRecurring">
+    <div *ngIf="isRecurring">
       <mat-form-field class="w-full">
         <mat-label>Frequency</mat-label>
-        <mat-select [(ngModel)]="newTransaction.frequency" name="frequency" required>
+        <mat-select [(ngModel)]="frequency" name="frequency" required>
           <mat-option value="daily">Daily</mat-option>
           <mat-option value="weekly">Weekly</mat-option>
           <mat-option value="monthly">Monthly</mat-option>
@@ -73,7 +73,7 @@
       <!-- Next Occurrence Field -->
       <mat-form-field appearance="fill" class="w-full">
         <mat-label>Next Occurrence</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="newTransaction.nextOccurrence" name="nextOccurrence" required />
+        <input matInput [matDatepicker]="picker" [(ngModel)]="nextOccurrence" name="nextOccurrence" required />
         <mat-hint>MM/DD/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>

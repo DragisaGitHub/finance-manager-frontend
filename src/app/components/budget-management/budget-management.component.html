@@ -1,0 +1,30 @@
+<div class="budget-container">
+  <h2>Manage Budgets</h2>
+
+  <!-- Form for creating or updating budgets -->
+  <form (ngSubmit)="saveBudget()">
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="newBudget.category" name="category" required>
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{ category.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" [(ngModel)]="newBudget.amount" name="amount" required />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Save Budget</button>
+  </form>
+
+  <!-- List of budgets with progress tracking -->
+  <div *ngFor="let budget of budgets">
+    <h3>{{ budget.category?.name }}</h3>
+    <p>Budget: {{ budget.amount | currency }}</p>
+    <mat-progress-bar mode="determinate" [value]="getProgress(budget)"></mat-progress-bar>
+    <p>{{ getProgress(budget) }}% spent</p>
+  </div>
+</div>

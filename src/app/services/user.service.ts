@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
-import { Role } from '../models/role.model';
 import { KeycloakTokenParsed } from 'keycloak-js';
-import { environment } from '../../environments/environment';
+import { Role } from '../api/model/role';
 
 @Injectable({
   providedIn: 'root',

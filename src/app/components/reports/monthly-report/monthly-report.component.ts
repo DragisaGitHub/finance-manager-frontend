@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { MonthlyReport } from '../../../models/monthly-report.model';
-import { ReportsService } from '../../../services/reports.service';
+import { MonthlyReport, MonthlyReportsService } from '../../../api';
 
 @Component({
   selector: 'app-monthly-report',
@@ -18,7 +17,7 @@ export class MonthlyReportComponent implements OnInit {
     responsive: true,
   };
 
-  constructor(private reportsService: ReportsService) {}
+  constructor(private reportsService: MonthlyReportsService) {}
 
   ngOnInit(): void {
     this.loadMonthlyReport();
@@ -27,20 +26,36 @@ export class MonthlyReportComponent implements OnInit {
   loadMonthlyReport(): void {
     const year = 2024;
     const month = 10;
-    this.reportsService
-      .getMonthlyReport(year, month)
-      .subscribe((report: MonthlyReport) => {
-        this.monthlyReport = report; // Set the data to monthlyReport
+
+    this.reportsService.getMonthlyReport(year, month).subscribe({
+      next: async (response: any) => {
+        let report: MonthlyReport;
+
+        if (response instanceof Blob) {
+          const text = await response.text(); // Convert Blob to text
+          report = JSON.parse(text); // Parse text to JSON
+        } else {
+          report = response; // Assume it's already a JSON object
+        }
+
+        this.monthlyReport = report;
+
+        // Use default values if totalIncome or totalExpense are undefined
+        const totalIncome = report.totalIncome ?? 0;
+        const totalExpense = report.totalExpense ?? 0;
+
         this.barChartData = {
           labels: ['Income', 'Expense'],
           datasets: [
             {
-              data: [report.totalIncome, report.totalExpense],
+              data: [totalIncome, totalExpense],
               label: 'Total Income vs Expense',
               backgroundColor: ['#42A5F5', '#FF6384'],
             },
           ],
         };
-      });
+      },
+      error: (error) => console.error('Error loading monthly report:', error),
+    });
   }
 }

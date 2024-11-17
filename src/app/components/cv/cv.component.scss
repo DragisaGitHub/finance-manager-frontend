@@ -1,0 +1,121 @@
+.cv-container {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  flex-wrap: wrap;
+
+  .cv-list {
+    flex: 1;
+    min-width: 250px;
+
+    .cv-item {
+      background: #f3f3f3;
+      border-radius: 5px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+
+      h3 {
+        margin: 0;
+        color: #333;
+      }
+
+      p {
+        margin: 0.5rem 0;
+        color: #555;
+      }
+
+      button {
+        margin-right: 0.5rem;
+      }
+
+      .cv-image {
+        text-align: center;
+        margin: 1rem 0;
+
+        .profile-image {
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid #ccc;
+          width: 100px;
+          height: 100px;
+          display: block;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+
+  .cv-form {
+    flex: 1;
+    min-width: 300px;
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    mat-form-field {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      margin-right: 0.5rem;
+    }
+
+    /* Nested sections for form items */
+    .file-upload-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Nested sections headers */
+    h4 {
+      margin-top: 1.5rem;
+      color: #333;
+      font-weight: bold;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 0.25rem;
+    }
+
+    /* Experience and Education items */
+    .education-section,
+    .experience-section {
+      background: #f9f9f9;
+      padding: 0.75rem;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      border: 1px solid #e0e0e0;
+
+      p {
+        margin: 0.25rem 0;
+        color: #444;
+      }
+    }
+
+    /* Skills and Languages lists */
+    .skills-list,
+    .languages-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0;
+      list-style-type: none;
+
+      li {
+        background: #e0f7fa;
+        color: #00796b;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
